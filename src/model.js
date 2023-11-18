@@ -14,7 +14,28 @@ export class Human extends Model {
   }
 }
 
-// TODO: Human.init()
+Human.init(
+  {
+    human_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+    },
+    fname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lname: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
+  }
+)
 
 export class Animal extends Model {
   [util.inspect.custom]() {
@@ -22,7 +43,27 @@ export class Animal extends Model {
   }
 }
 
-// TODO: Animal.init()
+Animal.init({
+
+  animal_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  species: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  animal_id: {
+    type: DataTypes.INTEGER,
+  },
+
+  }
+)
 
 // TODO: Define Relationship
 
