@@ -2,10 +2,7 @@ import { Op } from 'sequelize';
 import { Animal, Human } from './model.js';
 
 // Get the human with the primary key 2
-export const query1 = async () => {
-    const human = await Human.findByPk(2);
-    return human
-}
+export const query1 = await Human.findByPk(2);
 
 // Get the first animal whose species is "fish"
 export const query2 = await Animal.findOne({
@@ -45,7 +42,7 @@ export const query7 = await Animal.findAll({
 
 // Get all the humans who DON'T have an email address that contains "gmail"
 export const query8 = await Human.findAll({
-    where: { email :{ [Op.substring] : "gmail" }}
+    where: { email :{ [Op.notLike] : "%gmail%" }}
   });
 
 // Continue reading the instructions before you move on!
@@ -59,19 +56,39 @@ export async function printHumansAndAnimals() {
 
     humans.forEach( (human) => {
         
-        directoryArray.push(human.getFullName)
+        directoryArray.push(human.getFullName())
         
         animals.forEach( (animal) => {
-            if (human.human_id === animal.human_id) {
+            if (human.humanId === animal.humanId) {
                 const animalDirectoryLine = `- ${animal.name}`
                 directoryArray.push(animalDirectoryLine)
             }
         } )
     })
-
-    directoryArray.forEach((line) => console.log(line));
+    
+    console.log(directoryArray);
+    return directoryArray
 }
 
 // Return a Set containing the full names of all humans
 // with animals of the given species.
-export async function getHumansByAnimalSpecies(species) {}
+export async function getHumansByAnimalSpecies(species) {
+    const filteredHumans = new Set();
+    const humans = await Human.findAll();
+    const animals = await Animal.findAll();
+
+    
+
+    animals.forEach( (animal) => {
+        if (animal.species === species) {
+            const sortedHumans = humans.filter((human) => human.humanId === animal.humanId)
+            sortedHumans.forEach((sortedHuman) => {
+                const fullName = sortedHuman.getFullName()
+                filteredHumans.add(fullName);
+            })
+        }
+    })
+
+    return filteredHumans
+
+}
