@@ -2,7 +2,10 @@ import { Op } from 'sequelize';
 import { Animal, Human } from './model.js';
 
 // Get the human with the primary key 2
-export const query1 = await Human.findByPk(2);
+export const query1 = async () => {
+    const human = await Human.findByPk(2);
+    return human
+}
 
 // Get the first animal whose species is "fish"
 export const query2 = await Animal.findOne({
@@ -48,7 +51,26 @@ export const query8 = await Human.findAll({
 // Continue reading the instructions before you move on!
 
 // Print a directory of humans and their animals
-export async function printHumansAndAnimals() {}
+export async function printHumansAndAnimals() {
+    const humans = await Human.findAll();
+    const animals = await Animal.findAll();
+
+    let directoryArray = []
+
+    humans.forEach( (human) => {
+        
+        directoryArray.push(human.getFullName)
+        
+        animals.forEach( (animal) => {
+            if (human.human_id === animal.human_id) {
+                const animalDirectoryLine = `- ${animal.name}`
+                directoryArray.push(animalDirectoryLine)
+            }
+        } )
+    })
+
+    directoryArray.forEach((line) => console.log(line));
+}
 
 // Return a Set containing the full names of all humans
 // with animals of the given species.
